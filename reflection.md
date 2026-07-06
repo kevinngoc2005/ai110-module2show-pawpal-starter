@@ -32,9 +32,16 @@ many tasks), and `Scheduler` **1→1** `Owner` (a scheduler operates on one owne
 
 **b. Design changes**
 
-- _(To be filled in during implementation — describe at least one change and why. Candidate: whether
-  recurrence lives on `Task.next_occurrence()` or inside `Scheduler.complete_task()`, and how the two
-  ended up interacting.)_
+- **Added a `due_date` field to `Task`.** My first draft kept `Task` time-only (`"HH:MM"`), which was
+  enough for sorting and conflict detection. But once I implemented recurring tasks, "mark a daily task
+  complete and create the next one" had no meaning without a date to advance. I added
+  `due_date` (defaults to today) so `Task.next_occurrence()` can compute the following day/week with
+  `datetime.timedelta`. Conflict detection still compares only the `"HH:MM"` time, so this change
+  didn't complicate that logic — it just made recurrence real.
+- **Split responsibility for recurrence between `Task` and `Scheduler`.** `Task.next_occurrence()`
+  builds the *next* task object, but it's `Scheduler.complete_task()` that marks the current task done
+  and attaches the new occurrence back onto the correct pet. Keeping `Task` unaware of which `Pet`
+  owns it preserved the clean one-directional ownership (Owner → Pet → Task) from my original design.
 
 ---
 
