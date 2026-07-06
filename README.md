@@ -78,19 +78,39 @@ Remaining incomplete tasks (time-sorted):
 
 ## 🧪 Testing PawPal+
 
+Run the full suite from the project root:
+
 ```bash
-# Run the full test suite:
-pytest
-
-# Run with coverage:
-pytest --cov
+python -m pytest
 ```
 
-Sample test output:
+The suite (`tests/test_pawpal.py`) covers both happy paths and edge cases:
 
+- **Core:** `mark_complete()` flips task status; adding a task increases a pet's count.
+- **Sorting:** tasks from all pets are returned in chronological order.
+- **Filtering:** narrowing by pet name and by completion status.
+- **Conflict detection:** two tasks at the same time (across different pets) raise one
+  warning; unique times raise none.
+- **Recurrence:** completing a daily task auto-creates the next day's task; a one-off
+  task does not recur.
+- **Edge cases:** a pet with no tasks yields an empty schedule without errors.
+
+Sample output from a successful run:
+
+```text
+============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.6.0
+rootdir: ...\ai110-module2show-pawpal-starter
+collected 9 items
+
+tests\test_pawpal.py .........                                           [100%]
+
+============================== 9 passed in 0.02s ==============================
 ```
-# Paste your pytest output here
-```
+
+**Confidence level:** ⭐⭐⭐⭐☆ (4/5) — all core behaviors and the main edge cases are
+covered and passing; a future pass would add overlapping-duration conflicts (not just
+exact time matches).
 
 ## 📐 Smarter Scheduling
 
