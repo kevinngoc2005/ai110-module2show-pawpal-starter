@@ -44,14 +44,36 @@ pip install -r requirements.txt
 
 ## 🖥️ Sample Output
 
-Paste a sample of your app's CLI or Streamlit output here so a reader can see what a generated plan looks like:
+Actual terminal output from running `python main.py` (one owner, two pets, five tasks
+added out of order — including two at 08:00 to trigger a conflict warning):
 
-```
-# e.g.:
-# Daily plan for Biscuit (Golden Retriever):
-#   08:00 — Morning walk (30 min) [priority: high]
-#   09:00 — Feeding (10 min) [priority: high]
-#   ...
+```text
+====================================================
+Today's Schedule for Jordan
+  [ ] 08:00  Breakfast  (Biscuit) - daily
+  [ ] 08:00  Feed cat  (Mochi) - daily
+  [ ] 14:00  Vet appointment  (Biscuit) - once
+  [ ] 18:00  Evening walk  (Biscuit) - daily
+  [ ] 21:00  Night meds  (Mochi) - daily
+
+Warnings:
+  ! Conflict at 08:00: Biscuit's Breakfast, Mochi's Feed cat
+====================================================
+
+Biscuit's tasks only:
+  - 18:00 Evening walk
+  - 08:00 Breakfast
+  - 14:00 Vet appointment
+
+Completing Biscuit's Evening walk (daily)...
+  -> Auto-created next occurrence for 2026-07-07
+
+Remaining incomplete tasks (time-sorted):
+  - 08:00 Breakfast [daily]
+  - 08:00 Feed cat [daily]
+  - 14:00 Vet appointment [once]
+  - 18:00 Evening walk [daily]
+  - 21:00 Night meds [daily]
 ```
 
 ## 🧪 Testing PawPal+
