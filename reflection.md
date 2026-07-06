@@ -2,15 +2,39 @@
 
 ## 1. System Design
 
+**Three core actions a user can perform:**
+
+1. **Add a pet** to their profile (name + species).
+2. **Add a care task** to a specific pet (description, time of day, and how often it recurs).
+3. **View today's schedule** across all their pets, sorted by time, with warnings when two tasks collide.
+
 **a. Initial design**
 
-- Briefly describe your initial UML design.
-- What classes did you include, and what responsibilities did you assign to each?
+I split the system into four classes, each with a single clear responsibility:
+
+- **`Task`** — represents one care activity (a walk, feeding, medication, etc.). It holds a
+  `description`, a `time` in `"HH:MM"` format, a `frequency` (`once` / `daily` / `weekly`), and a
+  `completed` flag. It knows how to `mark_complete()` itself and how to produce its
+  `next_occurrence()` for recurring tasks.
+- **`Pet`** — stores a pet's `name` and `species` and owns a list of `Task` objects. It exposes
+  `add_task()`, `list_tasks()`, and `task_count()`. It does *not* know anything about scheduling —
+  it is just a container for that pet's tasks.
+- **`Owner`** — the top-level entity. Holds the owner's `name` and a list of `Pet` objects, with
+  `add_pet()` and `get_all_tasks()` (which flattens tasks across *every* pet so the scheduler can
+  work system-wide, not one pet at a time).
+- **`Scheduler`** — the "brain." It takes an `Owner` and organizes their tasks: `sort_by_time()`,
+  `filter_tasks()` (by pet or completion status), `detect_conflicts()` (same-time collisions), and
+  `complete_task()` (which also regenerates recurring tasks). Keeping this logic out of `Pet`/`Owner`
+  means the data classes stay simple and all the algorithms live in one place.
+
+**Relationships:** `Owner` **1→\*** `Pet` (an owner has many pets), `Pet` **1→\*** `Task` (a pet has
+many tasks), and `Scheduler` **1→1** `Owner` (a scheduler operates on one owner's whole system).
 
 **b. Design changes**
 
-- Did your design change during implementation?
-- If yes, describe at least one change and why you made it.
+- _(To be filled in during implementation — describe at least one change and why. Candidate: whether
+  recurrence lives on `Task.next_occurrence()` or inside `Scheduler.complete_task()`, and how the two
+  ended up interacting.)_
 
 ---
 
